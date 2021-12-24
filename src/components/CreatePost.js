@@ -1,15 +1,28 @@
 import { useState } from "react";
+import {db} from '../firebase';
+import { collection, addDoc } from "firebase/firestore"; 
 
 function CreatePost() {
   const [title, setTitle] = useState();
   const [subTitle, setSubTitle] = useState();
   const [content, setContent] = useState();
 
+
   function handleChange (e) {
     e.preventDefault();
     console.log('title',title);
     console.log('sub title',subTitle);
     console.log('content',content);
+    // db.collection('post').add({
+    //   
+
+    // });
+    addDoc(collection(db, "post"), {
+      title,
+      subTitle,
+      content,
+      createdAt: new Date()
+    });
 
   }
     return (
