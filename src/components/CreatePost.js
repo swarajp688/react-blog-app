@@ -1,29 +1,25 @@
-import { useState } from "react";
-import {db} from '../firebase';
-import { collection, addDoc } from "firebase/firestore"; 
 
+import { firestore } from '../firebase'; 
+import {useFormInput} from '../hooks';
 function CreatePost() {
-  const [title, setTitle] = useState();
-  const [subTitle, setSubTitle] = useState();
-  const [content, setContent] = useState();
+  const title = useFormInput('');
+  const subTitle = useFormInput('');
+  const content = useFormInput('');
 
 
-  function handleChange (e) {
-    e.preventDefault();
-    console.log('title',title);
-    console.log('sub title',subTitle);
-    console.log('content',content);
-    // db.collection('post').add({
-    //   
-
-    // });
-    addDoc(collection(db, "post"), {
-      title,
-      subTitle,
-      content,
-      createdAt: new Date()
+  function handleChange (event) {
+    event.preventDefault();
+    console.log('title',title.value);
+    console.log('sub title',subTitle.value);
+    console.log('content',content.value);
+    
+    firestore.collection('post').add({
+      title: title.value,
+      content: content.value,
+      subTitle: subTitle.value,
+      createdAt: new Date(),
     });
-
+    
   }
     return (
       <div className="create-post">
@@ -31,15 +27,15 @@ function CreatePost() {
         <form onSubmit={handleChange}>
           <div className='form-field'>
             <label>Title</label>
-            <input value={title} onChange={(e)=>setTitle(e.target.value)}/>
+            <input {...title} required/>
           </div>
           <div className='form-field'>
             <label>Sub Title</label>
-            <input value={subTitle} onChange={(e)=> setSubTitle(e.target.value)}/>
+            <input {...subTitle} required/>
           </div>
           <div className='form-field'>
             <label></label>
-            <textarea value={content} onChange={(e)=> setContent(e.target.value)} ></textarea>
+            <textarea {...content} required></textarea>
           </div>
           <button className='create-post-btn'>Create Post</button>
         </form>
